@@ -1,16 +1,1 @@
-[
-{
-  "username": "abc",
-  "password": "parola",
-  "email": "abc@yahoo.com",
-  "firstName": "Ion",
-  "lastName": "Gheorghe"
-},
-{
-  "username": "abcd",
-  "password": "parola2",
-  "email": "abc2@yahoo.com",
-  "firstName": "Ion2",
-  "lastName": "Gheorghe2"
-}
-]
+[{"firstName":"Ion","lastName":"Vasile","password":"parola","email":"abc1@yahoo.com","username":"ab1c"},{"firstName":"Ion","lastName":"Vasile","password":"parola","email":"abc1@yahoo.com","username":"abc"}]
