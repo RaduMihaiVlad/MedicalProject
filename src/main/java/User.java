@@ -19,9 +19,9 @@ public class User {
         return result;
     }
 
-    public User (String email,
-                 String username,
+    public User (String username,
                  String password,
+                 String email,
                  String firstName,
                  String lastName) {
         this.email = email;
