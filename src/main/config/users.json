@@ -1,7 +1,16 @@
+[
 {
   "username": "abc",
   "password": "parola",
   "email": "abc@yahoo.com",
   "firstName": "Ion",
   "lastName": "Gheorghe"
+},
+{
+  "username": "abcd",
+  "password": "parola2",
+  "email": "abc2@yahoo.com",
+  "firstName": "Ion2",
+  "lastName": "Gheorghe2"
 }
+]
