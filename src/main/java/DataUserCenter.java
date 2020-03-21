@@ -92,27 +92,29 @@ public class DataUserCenter {
         }
     }
 
-    protected String getUserValidationError(JSONObject jsonUser) {
+    protected String getUserValidationError(JSONObject jsonUser) throws IOException, ParseException {
         /*
             This function will return the validation error found in method isValidUser()
         */
-        if (jsonUser.get("Invalid Email") != null) {
+        User current_user = User.fromJSONObjectToUser(jsonUser);
+        if (!current_user.isValidEmailAddress()) {
             return "Invalid Email";
         }
-        if (jsonUser.get("Email already taken by another user.") != null) {
-            return "Email already taken by another user.";
+        if (this.emailAlreadyTaken(current_user)) {
+            return "Email already taken";
         }
         return "User with this username already exists. Try another username.";
     }
 
-    protected boolean isValidUser(JSONObject jsonUser) {
-        if (jsonUser.get("Invalid Email") != null) {
+    protected boolean isValidUser(JSONObject jsonUser) throws IOException, ParseException {
+        User current_user = User.fromJSONObjectToUser(jsonUser);
+        if (!current_user.isValidEmailAddress()) {
             return false;
         }
-        if (jsonUser.get("User with this username already exists. Try another username.") != null) {
+        if (this.userAlreadyExists(current_user)) {
             return false;
         }
-        if (jsonUser.get("Email already taken by another user.") != null) {
+        if (this.emailAlreadyTaken(current_user)) {
             return false;
         }
         return true;
@@ -135,20 +137,20 @@ public class DataUserCenter {
         User user = new User(username, password, email, firstName, lastName);
         JSONObject jsonUser = new JSONObject();
 
-        if (!user.isValidEmailAddress()) {
-            jsonUser.put("Invalid Email", "Invalid Email");
-            return jsonUser;
-        }
-        if (this.userAlreadyExists(user)) {
-            jsonUser.put("User with this username already exists. Try another username.",
-                         "User with this username already exists. Try another username.");
-            return jsonUser;
-        }
-        if (this.emailAlreadyTaken(user)) {
-            jsonUser.put("Email already taken by another user.",
-                         "Email already taken by another user.");
-            return jsonUser;
-        }
+//        if (!user.isValidEmailAddress()) {
+//            jsonUser.put("Invalid Email", "Invalid Email");
+//            return jsonUser;
+//        }
+//        if (this.userAlreadyExists(user)) {
+//            jsonUser.put("User with this username already exists. Try another username.",
+//                         "User with this username already exists. Try another username.");
+//            return jsonUser;
+//        }
+//        if (this.emailAlreadyTaken(user)) {
+//            jsonUser.put("Email already taken by another user.",
+//                         "Email already taken by another user.");
+//            return jsonUser;
+//        }
         jsonUser.put("username", user.getUsername());
         jsonUser.put("password", user.getPassword());
         jsonUser.put("email", user.getEmail());

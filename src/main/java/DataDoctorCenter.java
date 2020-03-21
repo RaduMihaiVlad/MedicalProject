@@ -40,6 +40,23 @@ public class DataDoctorCenter extends DataUserCenter {
         return addToLocalStorage(jsonObject);
     }
 
+    public String registerClientFromJSONObjectUser(JSONObject jsonUser, InputStream inputStream) throws IOException, ParseException {
+        Scanner scanner = new Scanner(inputStream);
+        String phoneNumber = scanner.nextLine();
+        int age, absolvationYear;
+        try {
+            age = Integer.parseInt(scanner.nextLine());
+            absolvationYear = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            return "Age or absolvation year must be an integer.";
+        }
+        String city = scanner.nextLine();
+        String country = scanner.nextLine();
+        jsonUser.put("phoneNumber", phoneNumber);
+        jsonUser.put("age", age);
+        return addToLocalStorage(jsonUser);
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         DataDoctorCenter dataDoctorCenter = new DataDoctorCenter("src/main/config/doctors.json");
         System.out.println(dataDoctorCenter.registerDoctor(System.in));

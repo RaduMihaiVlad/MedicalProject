@@ -38,6 +38,20 @@ public class DataClientCenter extends DataUserCenter {
         return addToLocalStorage(jsonObject);
     }
 
+    public String registerClientFromJSONObjectUser(JSONObject jsonUser, InputStream inputStream) throws IOException, ParseException {
+        Scanner scanner = new Scanner(inputStream);
+        String phoneNumber = scanner.nextLine();
+        int age;
+        try {
+            age = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            return "Age must be an integer.";
+        }
+        jsonUser.put("phoneNumber", phoneNumber);
+        jsonUser.put("age", age);
+        return addToLocalStorage(jsonUser);
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         DataClientCenter dataClientCenter = new DataClientCenter("src/main/config/clients.json");
         System.out.println(dataClientCenter.registerClient(System.in));

@@ -1,3 +1,5 @@
+import org.json.simple.JSONObject;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -46,7 +48,24 @@ public class User {
     public boolean isSameUser(User user) {
         return this.username.equals(user.username);
     }
-
+    public static User fromJSONObjectToUser(JSONObject jsonUser) {
+        User user = new User(jsonUser.get("username").toString(),
+                             jsonUser.get("password").toString(),
+                             jsonUser.get("email").toString(),
+                             jsonUser.get("firstName").toString(),
+                             jsonUser.get("lastName").toString());
+        return user;
+    }
+    public static boolean isValidEmailAddress(User user) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(user.email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
 
     public static void main(String[] args) {
         User user = new User("abc@yahoo.com", "abc", "parola", "Ion", "Vasile");
