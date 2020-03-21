@@ -12,7 +12,7 @@ public class DataUserCenter {
 
     String local_storage_path;
 
-    private boolean userAlreadyExists(User user) throws IOException, ParseException {
+    protected boolean userAlreadyExists(User user) throws IOException, ParseException {
         /*
             It will check if user already exists in local storage.
         */

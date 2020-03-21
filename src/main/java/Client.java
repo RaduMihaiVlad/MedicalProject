@@ -10,4 +10,8 @@ public class Client extends User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getPhoneNumber() { return phoneNumber;}
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber;}
+    public int getAge() { return age;}
+    public void setAge(int age) { this.age = age;}
 }
