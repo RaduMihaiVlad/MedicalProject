@@ -1,10 +1,17 @@
 package Centers;
 
+import UsersTypes.Client;
+import UsersTypes.Doctor;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class DataClientCenter extends DataUserCenter {
@@ -53,9 +60,21 @@ public class DataClientCenter extends DataUserCenter {
         return addToLocalStorage(jsonUser);
     }
 
+    private List<Client> fromJSONToClientList() throws IOException, ParseException {
+        List<Client> clientList = new ArrayList<Client>();
+        JSONParser parser = new JSONParser();
+        JSONArray clients = (JSONArray) parser.parse(new FileReader(this.local_storage_path));
+        for (Object o: clients) {
+            JSONObject db_client = (JSONObject) o;
+            clientList.add(Client.fromJSONObjectToClient(db_client));
+        }
+        return clientList;
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         DataClientCenter dataClientCenter = new DataClientCenter("src/main/config/clients.json");
         System.out.println(dataClientCenter.registerClient(System.in));
+
     }
 
 }

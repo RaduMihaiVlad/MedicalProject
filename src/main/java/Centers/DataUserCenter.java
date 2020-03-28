@@ -3,8 +3,12 @@ package Centers;
 import java.io.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
+import UsersTypes.Doctor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -141,20 +145,6 @@ public class DataUserCenter {
         User user = new User(username, password, email, firstName, lastName);
         JSONObject jsonUser = new JSONObject();
 
-//        if (!user.isValidEmailAddress()) {
-//            jsonUser.put("Invalid Email", "Invalid Email");
-//            return jsonUser;
-//        }
-//        if (this.userAlreadyExists(user)) {
-//            jsonUser.put("User with this username already exists. Try another username.",
-//                         "User with this username already exists. Try another username.");
-//            return jsonUser;
-//        }
-//        if (this.emailAlreadyTaken(user)) {
-//            jsonUser.put("Email already taken by another user.",
-//                         "Email already taken by another user.");
-//            return jsonUser;
-//        }
         jsonUser.put("username", user.getUsername());
         jsonUser.put("password", user.getPassword());
         jsonUser.put("email", user.getEmail());
@@ -203,12 +193,29 @@ public class DataUserCenter {
     }
 
 
+    private List<User> fromJSONToUserList() throws IOException, ParseException {
+        List<User> usersList = new ArrayList<User>();
+        JSONParser parser = new JSONParser();
+        JSONArray users = (JSONArray) parser.parse(new FileReader(this.local_storage_path));
+        for (Object o: users) {
+            JSONObject db_user = (JSONObject) o;
+            usersList.add(Doctor.fromJSONObjectToUser(db_user));
+        }
+        return usersList;
+    }
 
     public static void main(String[] args) throws IOException, ParseException {
         DataUserCenter dataCenter  = new DataUserCenter("C:\\Users\\eu\\Desktop\\facultate\\PAO\\ProiectPao\\src\\main\\config\\users.json");
-        User user = new User("abc1@yahoo.com", "abc", "parola", "Ion", "Vasile");
+//        User user = new User("abc1@yahoo.com", "abc", "parola", "Ion", "Vasile");
 //        System.out.println(dataCenter.isValidLogin(user));
-        System.out.println(dataCenter.registerUser(System.in));
+//        System.out.println(dataCenter.registerUser(System.in));
+
+        List<User> userList = dataCenter.fromJSONToUserList();
+        Collections.sort(userList);
+        for (int i = 0; i < userList.size(); ++i) {
+            System.out.println(userList.get(i).getUsername());
+        }
+
     }
 
 }

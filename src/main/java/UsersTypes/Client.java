@@ -1,5 +1,7 @@
 package UsersTypes;
 
+import org.json.simple.JSONObject;
+
 public class Client extends User {
 
     private String phoneNumber;
@@ -16,4 +18,15 @@ public class Client extends User {
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber;}
     public int getAge() { return age;}
     public void setAge(int age) { this.age = age;}
+
+    public static Client fromJSONObjectToClient(JSONObject jsonClient) {
+        return new Client(jsonClient.get("username").toString(),
+                jsonClient.get("password").toString(),
+                jsonClient.get("email").toString(),
+                jsonClient.get("firstName").toString(),
+                jsonClient.get("lastName").toString(),
+                jsonClient.get("phoneNumber").toString(),
+                Integer.parseInt(jsonClient.get("age").toString()));
+
+    }
 }

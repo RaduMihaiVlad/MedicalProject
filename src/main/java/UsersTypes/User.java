@@ -4,24 +4,14 @@ import org.json.simple.JSONObject;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.util.List;
 
-public class User {
+public class User implements Comparable<User> {
     private String email;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
-
-    public boolean isValidEmailAddress() {
-        boolean result = true;
-        try {
-            InternetAddress emailAddr = new InternetAddress(this.email);
-            emailAddr.validate();
-        } catch (AddressException ex) {
-            result = false;
-        }
-        return result;
-    }
 
     public User (String username,
                  String password,
@@ -35,6 +25,16 @@ public class User {
         this.lastName = lastName;
     }
 
+    public boolean isValidEmailAddress() {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(this.email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
 
     public String getEmail() { return email;}
     public String getUsername() { return username;}
@@ -69,6 +69,7 @@ public class User {
         return result;
     }
 
+
     public static void main(String[] args) {
         User user = new User("abc@yahoo.com", "abc", "parola", "Ion", "Vasile");
         System.out.println(user.isValidEmailAddress());
@@ -76,4 +77,8 @@ public class User {
     }
 
 
+    public int compareTo(User o) {
+        if (this.username.length() > o.username.length()) return 1;
+        return -1;
+    }
 }
