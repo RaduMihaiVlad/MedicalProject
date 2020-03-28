@@ -1,4 +1,5 @@
-import javafx.scene.chart.PieChart;
+package Centers;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -6,15 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class DataClientCenter extends DataUserCenter {
+public class DataDoctorCenter extends DataUserCenter {
 
-    public DataClientCenter(String clients_data_path) {
-        super(clients_data_path);
+    public DataDoctorCenter(String users_data_path) {
+        super(users_data_path);
     }
 
-    public String registerClient(InputStream inputStream) throws IOException, ParseException {
+    public String registerDoctor(InputStream inputStream) throws IOException, ParseException {
         /*
-            This method will register a client.
+            This method will register a doctor.
             If the registration was complete, it will return User successfully added.
             If the registration failed, one the above will appear:
                 1. Email failure: Invalid Email
@@ -27,12 +28,15 @@ public class DataClientCenter extends DataUserCenter {
         }
         Scanner scanner = new Scanner(inputStream);
         String phoneNumber = scanner.nextLine();
-        int age;
+        int age, absolvationYear;
         try {
             age = Integer.parseInt(scanner.nextLine());
+            absolvationYear = Integer.parseInt(scanner.nextLine());
         } catch (Exception e) {
-            return "Age must be an integer.";
+            return "Age or absolvation year must be an integer.";
         }
+        String city = scanner.nextLine();
+        String country = scanner.nextLine();
         jsonObject.put("phoneNumber", phoneNumber);
         jsonObject.put("age", age);
         return addToLocalStorage(jsonObject);
@@ -41,20 +45,22 @@ public class DataClientCenter extends DataUserCenter {
     public String registerClientFromJSONObjectUser(JSONObject jsonUser, InputStream inputStream) throws IOException, ParseException {
         Scanner scanner = new Scanner(inputStream);
         String phoneNumber = scanner.nextLine();
-        int age;
+        int age, absolvationYear;
         try {
             age = Integer.parseInt(scanner.nextLine());
+            absolvationYear = Integer.parseInt(scanner.nextLine());
         } catch (Exception e) {
-            return "Age must be an integer.";
+            return "Age or absolvation year must be an integer.";
         }
+        String city = scanner.nextLine();
+        String country = scanner.nextLine();
         jsonUser.put("phoneNumber", phoneNumber);
         jsonUser.put("age", age);
         return addToLocalStorage(jsonUser);
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        DataClientCenter dataClientCenter = new DataClientCenter("src/main/config/clients.json");
-        System.out.println(dataClientCenter.registerClient(System.in));
+        DataDoctorCenter dataDoctorCenter = new DataDoctorCenter("src/main/config/doctors.json");
+        System.out.println(dataDoctorCenter.registerDoctor(System.in));
     }
-
 }

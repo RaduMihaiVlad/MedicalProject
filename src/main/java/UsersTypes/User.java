@@ -1,3 +1,5 @@
+package UsersTypes;
+
 import org.json.simple.JSONObject;
 
 import javax.mail.internet.AddressException;
@@ -49,12 +51,12 @@ public class User {
         return this.username.equals(user.username);
     }
     public static User fromJSONObjectToUser(JSONObject jsonUser) {
-        User user = new User(jsonUser.get("username").toString(),
+        return new User(jsonUser.get("username").toString(),
                              jsonUser.get("password").toString(),
                              jsonUser.get("email").toString(),
                              jsonUser.get("firstName").toString(),
                              jsonUser.get("lastName").toString());
-        return user;
+
     }
     public static boolean isValidEmailAddress(User user) {
         boolean result = true;

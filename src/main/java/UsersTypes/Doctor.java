@@ -1,3 +1,5 @@
+package UsersTypes;
+
 public class Doctor extends User {
 
     private String phoneNumber;

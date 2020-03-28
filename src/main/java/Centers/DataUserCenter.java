@@ -1,3 +1,5 @@
+package Centers;
+
 import java.io.*;
 
 import java.io.IOException;
@@ -8,11 +10,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import UsersTypes.User;
+
 public class DataUserCenter {
 
     String local_storage_path;
 
-    protected boolean userAlreadyExists(User user) throws IOException, ParseException {
+    public boolean userAlreadyExists(User user) throws IOException, ParseException {
         /*
             It will check if user already exists in local storage.
         */
@@ -92,7 +96,7 @@ public class DataUserCenter {
         }
     }
 
-    protected String getUserValidationError(JSONObject jsonUser) throws IOException, ParseException {
+    public String getUserValidationError(JSONObject jsonUser) throws IOException, ParseException {
         /*
             This function will return the validation error found in method isValidUser()
         */
@@ -106,7 +110,7 @@ public class DataUserCenter {
         return "User with this username already exists. Try another username.";
     }
 
-    protected boolean isValidUser(JSONObject jsonUser) throws IOException, ParseException {
+    public boolean isValidUser(JSONObject jsonUser) throws IOException, ParseException {
         User current_user = User.fromJSONObjectToUser(jsonUser);
         if (!current_user.isValidEmailAddress()) {
             return false;
