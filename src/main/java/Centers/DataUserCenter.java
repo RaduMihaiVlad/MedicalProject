@@ -3,10 +3,7 @@ package Centers;
 import java.io.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import UsersTypes.Doctor;
 import org.json.simple.JSONArray;
@@ -214,6 +211,15 @@ public class DataUserCenter {
         Collections.sort(userList);
         for (int i = 0; i < userList.size(); ++i) {
             System.out.println(userList.get(i).getUsername());
+        }
+
+        Map<String, User> userMap = new HashMap<String, User>();
+        for (int i = 0; i < userList.size(); ++i) {
+            userMap.put(userList.get(i).getUsername(), userList.get(i));
+        }
+
+        for (String key: userMap.keySet()) {
+            System.out.println(userMap.get(key).getUsername());
         }
 
     }
