@@ -201,14 +201,25 @@ public class DataUserCenter {
         return usersList;
     }
 
+    private List<User> fromJSONToSortedUserList() throws IOException, ParseException {
+        List<User> usersList = new ArrayList<User>();
+        JSONParser parser = new JSONParser();
+        JSONArray users = (JSONArray) parser.parse(new FileReader(this.local_storage_path));
+        for (Object o: users) {
+            JSONObject db_user = (JSONObject) o;
+            usersList.add(Doctor.fromJSONObjectToUser(db_user));
+        }
+        Collections.sort(usersList);
+        return usersList;
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         DataUserCenter dataCenter  = new DataUserCenter("C:\\Users\\eu\\Desktop\\facultate\\PAO\\ProiectPao\\src\\main\\config\\users.json");
 //        User user = new User("abc1@yahoo.com", "abc", "parola", "Ion", "Vasile");
 //        System.out.println(dataCenter.isValidLogin(user));
 //        System.out.println(dataCenter.registerUser(System.in));
 
-        List<User> userList = dataCenter.fromJSONToUserList();
-        Collections.sort(userList);
+        List<User> userList = dataCenter.fromJSONToSortedUserList();
         for (int i = 0; i < userList.size(); ++i) {
             System.out.println(userList.get(i).getUsername());
         }
