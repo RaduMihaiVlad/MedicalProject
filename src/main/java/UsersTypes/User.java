@@ -69,16 +69,9 @@ public class User implements Comparable<User> {
         return result;
     }
 
-
-    public static void main(String[] args) {
-        User user = new User("abc@yahoo.com", "abc", "parola", "Ion", "Vasile");
-        System.out.println(user.isValidEmailAddress());
-
-    }
-
-
     public int compareTo(User o) {
         if (this.username.length() > o.username.length()) return 1;
         return -1;
     }
+
 }
