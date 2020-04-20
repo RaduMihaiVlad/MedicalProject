@@ -35,7 +35,6 @@ public class User implements Comparable<User> {
         }
         return result;
     }
-
     public String getEmail() { return email;}
     public String getUsername() { return username;}
     public String getPassword() { return password;}

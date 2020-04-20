@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import javax.print.Doc;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class FileManipulator {
@@ -80,7 +82,6 @@ public class FileManipulator {
         csvWriter.close();
     }
 
-
     public void writeClientsToCSV(String filePath, List<Client> clientList) throws IOException, ParseException {
 
         JSONParser parser = new JSONParser();
@@ -136,6 +137,40 @@ public class FileManipulator {
 
         csvWriter.flush();
         csvWriter.close();
+    }
+
+    public List<Client> readClients(String filePath) throws IOException {
+        BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
+        List<String> fields = Arrays.asList(csvReader.readLine().split(","));
+        String row;
+        List<Client> clients = new ArrayList<Client>();
+        while ((row = csvReader.readLine()) != null) {
+            List<String> listClient = Arrays.asList(row.split(","));
+            HashMap<String, String> mapClient = new HashMap<String, String>();
+            for (int i = 0; i < listClient.size(); ++i) {
+                mapClient.put(fields.get(i), listClient.get(i));
+            }
+            clients.add(new Client(mapClient));
+        }
+
+        return clients;
+    }
+
+    public List<Doctor> readDoctors(String filePath) throws IOException {
+        BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
+        List<String> fields = Arrays.asList(csvReader.readLine().split(","));
+        String row;
+        List<Doctor> doctors = new ArrayList<Doctor>();
+        while ((row = csvReader.readLine()) != null) {
+            List<String> listDoctor = Arrays.asList(row.split(","));
+            HashMap<String, String> mapDoctor = new HashMap<String, String>();
+            for (int i = 0; i < listDoctor.size(); ++i) {
+                mapDoctor.put(fields.get(i), listDoctor.get(i));
+            }
+            doctors.add(new Doctor(mapDoctor));
+        }
+
+        return doctors;
     }
 
 

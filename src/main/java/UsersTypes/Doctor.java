@@ -2,6 +2,8 @@ package UsersTypes;
 
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
+
 public class Doctor extends User {
 
     private String phoneNumber;
@@ -18,6 +20,16 @@ public class Doctor extends User {
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.country = country;
+    }
+
+    public Doctor(HashMap<String, String> doctorMap) {
+        super(doctorMap.get("username"), doctorMap.get("password"),
+                doctorMap.get("email"), doctorMap.get("firstname"), doctorMap.get("lastname"));
+        this.age = Integer.parseInt(doctorMap.get("age"));
+        this.phoneNumber = doctorMap.get("phone_number");
+        this.absolvationYear = Integer.parseInt(doctorMap.get("absolvation_year"));
+        this.city = doctorMap.get("city");
+        this.country = doctorMap.get("country");
     }
 
     public String getCountry() { return country;}
@@ -78,6 +90,12 @@ public class Doctor extends User {
         }
         if (field.equals("absolvation_year")) {
             return String.valueOf(getAbsolvationYear());
+        }
+        if (field.equals("city")) {
+            return getCity();
+        }
+        if (field.equals("country")) {
+            return getCountry();
         }
         return "Unknown field";
     }

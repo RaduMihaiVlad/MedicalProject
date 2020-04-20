@@ -1,5 +1,7 @@
-absolvation_year,password,firstname,phone_number,email,age,username,lastname
-12,d12,d14,1123,d13@yahoo.com,11,d11,d15
-22,d22,d24,2345,d23@yahoo.com,21,d21,d25
-12,d12,d14,1123,d13@yahoo.com,11,d11,d15
-22,d22,d24,2345,d23@yahoo.com,21,d21,d25
+absolvation_year,country,password,firstname,city,phone_number,email,age,username,lastname
+12,d17,d12,d14,d16,1123,d13@yahoo.com,11,d11,d15
+22,d27,d22,d24,d26,2345,d23@yahoo.com,21,d21,d25
+12,d17,d12,d14,d16,1123,d13@yahoo.com,11,d11,d15
+22,d27,d22,d24,d26,2345,d23@yahoo.com,21,d21,d25
+12,d17,d12,d14,d16,1123,d13@yahoo.com,11,d11,d15
+22,d27,d22,d24,d26,2345,d23@yahoo.com,21,d21,d25

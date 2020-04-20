@@ -59,6 +59,9 @@ public class ClientsAndDoctorsStorageManipulator {
         FileManipulator fileManipulator = FileManipulator.getInstance();
         fileManipulator.writeDoctorsToCSV("src/main/StoringFiles/doctors.csv", doctorList);
         fileManipulator.writeClientsToCSV("src/main/StoringFiles/clients.csv", clientList);
+        clientList = fileManipulator.readClients("src/main/StoringFiles/clients.csv");
+        doctorList = fileManipulator.readDoctors("src/main/StoringFiles/doctors.csv");
+        System.out.println("da");
     }
 
 }

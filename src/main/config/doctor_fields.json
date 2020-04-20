@@ -5,8 +5,10 @@
     "email": "String",
     "firstname": "String",
     "lastname": "String",
-    "phone_number": "String",
     "age": "Int",
-    "absolvation_year": "Int"
+    "absolvation_year": "Int",
+    "phone_number": "String",
+    "city": "String",
+    "country": "String"
   }
 ]

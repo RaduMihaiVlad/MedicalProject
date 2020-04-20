@@ -2,6 +2,8 @@ package UsersTypes;
 
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
+
 public class Client extends User {
 
     private String phoneNumber;
@@ -12,6 +14,13 @@ public class Client extends User {
         super(username, password, email, firstName, lastName);
         this.age = age;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Client(HashMap<String, String> clientMap) {
+        super(clientMap.get("username"), clientMap.get("password"),
+                clientMap.get("email"), clientMap.get("firstname"), clientMap.get("lastname"));
+        this.age = Integer.parseInt(clientMap.get("age"));
+        this.phoneNumber = clientMap.get("phone_number");
     }
 
     public String getPhoneNumber() { return phoneNumber;}
