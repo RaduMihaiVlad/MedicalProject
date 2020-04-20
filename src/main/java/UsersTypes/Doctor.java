@@ -1,14 +1,6 @@
 package UsersTypes;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Doctor extends User {
 
@@ -60,5 +52,33 @@ public class Doctor extends User {
 
     public void setAbsolvationYear(int absolvationYear) {
         this.absolvationYear = absolvationYear;
+    }
+
+    public String getByField(String field) {
+        if (field.equals("username")) {
+            return getUsername();
+        }
+        if (field.equals("password")) {
+            return getPassword();
+        }
+        if (field.equals("email")) {
+            return getEmail();
+        }
+        if (field.equals("firstname")) {
+            return getFirstName();
+        }
+        if (field.equals("lastname")) {
+            return getLastName();
+        }
+        if (field.equals("phone_number")) {
+            return getPhoneNumber();
+        }
+        if (field.equals("age")) {
+            return String.valueOf(getAge());
+        }
+        if (field.equals("absolvation_year")) {
+            return String.valueOf(getAbsolvationYear());
+        }
+        return "Unknown field";
     }
 }

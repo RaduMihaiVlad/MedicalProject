@@ -71,6 +71,10 @@ public class DataClientCenter extends DataUserCenter {
         return clientList;
     }
 
+    public List<Client> getClients() throws IOException, ParseException {
+        return fromJSONToClientList();
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         DataClientCenter dataClientCenter = new DataClientCenter("src/main/config/clients.json");
         System.out.println(dataClientCenter.registerClient(System.in));

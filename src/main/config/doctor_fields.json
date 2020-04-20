@@ -1,0 +1,12 @@
+[
+  {
+    "username": "String",
+    "password": "String",
+    "email": "String",
+    "firstname": "String",
+    "lastname": "String",
+    "phone_number": "String",
+    "age": "Int",
+    "absolvation_year": "Int"
+  }
+]

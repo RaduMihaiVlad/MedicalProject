@@ -54,7 +54,7 @@ public class DataDoctorCenter extends DataUserCenter {
     }
 
 
-    public String registerClientFromJSONObjectUser(JSONObject jsonUser, InputStream inputStream) throws IOException, ParseException {
+    public String registerDoctorFromJSONObjectUser(JSONObject jsonUser, InputStream inputStream) throws IOException, ParseException {
         Scanner scanner = new Scanner(inputStream);
         int age, absolvationYear;
         try {
@@ -83,6 +83,10 @@ public class DataDoctorCenter extends DataUserCenter {
             doctorList.add(Doctor.fromJSONObjectToDoctor(db_doctor));
         }
         return doctorList;
+    }
+
+    public List<Doctor> getDoctors() throws IOException, ParseException {
+        return fromJSONToDoctorList();
     }
 
     public static void main(String[] args) throws IOException, ParseException {

@@ -1,11 +1,14 @@
 import Centers.DataClientCenter;
 import Centers.DataDoctorCenter;
+import UsersTypes.Doctor;
 import UsersTypes.User;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import javax.print.Doc;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class ClientsAndDoctorsStorageManipulator {
     DataClientCenter dataClientCenter;
@@ -40,7 +43,7 @@ public class ClientsAndDoctorsStorageManipulator {
         if (!dataDoctorCenter.isValidUser(jsonUser)) {
             return dataDoctorCenter.getUserValidationError(jsonUser);
         }
-        return dataDoctorCenter.registerClientFromJSONObjectUser(jsonUser, inputStream);
+        return dataDoctorCenter.registerDoctorFromJSONObjectUser(jsonUser, inputStream);
     }
 
     public static void main(String[] args) throws IOException, ParseException {
@@ -48,8 +51,11 @@ public class ClientsAndDoctorsStorageManipulator {
                 new ClientsAndDoctorsStorageManipulator("src/main/config/clients.json",
                                                         "src/main/config/doctors.json");
 
-        System.out.println(clientsAndDoctorsStorageManipulator.registerAsClient(System.in));
+//        System.out.println(clientsAndDoctorsStorageManipulator.registerAsClient(System.in));
 
+        List<Doctor> doctorList = clientsAndDoctorsStorageManipulator.dataDoctorCenter.getDoctors();
+        FileManipulator fileManipulator = FileManipulator.getInstance();
+        fileManipulator.writeDoctorsToCSV("src/main/StoringFiles/doctors.csv", doctorList);
     }
 
 }
