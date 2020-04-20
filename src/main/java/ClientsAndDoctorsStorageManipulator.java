@@ -1,5 +1,6 @@
 import Centers.DataClientCenter;
 import Centers.DataDoctorCenter;
+import UsersTypes.Client;
 import UsersTypes.Doctor;
 import UsersTypes.User;
 import org.json.simple.JSONObject;
@@ -54,8 +55,10 @@ public class ClientsAndDoctorsStorageManipulator {
 //        System.out.println(clientsAndDoctorsStorageManipulator.registerAsClient(System.in));
 
         List<Doctor> doctorList = clientsAndDoctorsStorageManipulator.dataDoctorCenter.getDoctors();
+        List<Client> clientList = clientsAndDoctorsStorageManipulator.dataClientCenter.getClients();
         FileManipulator fileManipulator = FileManipulator.getInstance();
         fileManipulator.writeDoctorsToCSV("src/main/StoringFiles/doctors.csv", doctorList);
+        fileManipulator.writeClientsToCSV("src/main/StoringFiles/clients.csv", clientList);
     }
 
 }

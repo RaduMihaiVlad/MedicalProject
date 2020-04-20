@@ -6,9 +6,6 @@
     "firstname": "String",
     "lastname": "String",
     "age": "Int",
-    "absolvation_year": "Int",
-    "phone_number": "String",
-    "city": "String",
-    "country": "String"
+    "phone_number": "String"
   }
 ]

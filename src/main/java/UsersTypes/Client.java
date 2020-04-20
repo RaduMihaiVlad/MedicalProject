@@ -29,4 +29,31 @@ public class Client extends User {
                 Integer.parseInt(jsonClient.get("age").toString()));
 
     }
+
+    public String getByField(String field) {
+        if (field.equals("username")) {
+            return getUsername();
+        }
+        if (field.equals("password")) {
+            return getPassword();
+        }
+        if (field.equals("email")) {
+            return getEmail();
+        }
+        if (field.equals("firstname")) {
+            return getFirstName();
+        }
+        if (field.equals("lastname")) {
+            return getLastName();
+        }
+        if (field.equals("phone_number")) {
+            return getPhoneNumber();
+        }
+        if (field.equals("age")) {
+            return String.valueOf(getAge());
+        }
+        return "Unknown field";
+    }
+
+
 }
