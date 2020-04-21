@@ -56,11 +56,14 @@ public class ClientsAndDoctorsStorageManipulator {
 
         List<Doctor> doctorList = clientsAndDoctorsStorageManipulator.dataDoctorCenter.getDoctors();
         List<Client> clientList = clientsAndDoctorsStorageManipulator.dataClientCenter.getClients();
-        FileManipulator fileManipulator = FileManipulator.getInstance();
-        fileManipulator.writeDoctorsToCSV("src/main/StoringFiles/doctors.csv", doctorList);
-        fileManipulator.writeClientsToCSV("src/main/StoringFiles/clients.csv", clientList);
-        clientList = fileManipulator.readClients("src/main/StoringFiles/clients.csv");
-        doctorList = fileManipulator.readDoctors("src/main/StoringFiles/doctors.csv");
+        FileManipulator fileManipulator = FileManipulator.getInstance("src/main/StoringFiles/doctors.csv",
+                                                                        "src/main/StoringFiles/doctors.csv",
+                                                                        "src/main/StoringFiles/clients.csv",
+                                                                        "src/main/StoringFiles/clients.csv");
+        fileManipulator.writeDoctorsToCSV(doctorList);
+        fileManipulator.writeClientsToCSV(clientList);
+        clientList = fileManipulator.readClients();
+        doctorList = fileManipulator.readDoctors();
         System.out.println("da");
     }
 
