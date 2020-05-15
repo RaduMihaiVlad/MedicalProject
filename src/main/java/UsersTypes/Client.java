@@ -16,6 +16,11 @@ public class Client extends User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String toString() {
+        return getUsername() + " " + getPassword() + " " + getEmail() + " " + getFirstName() + " " +
+                getLastName() + " " + getPhoneNumber() + " " + String.valueOf(getAge());
+    }
+
     public Client(HashMap<String, String> clientMap) {
         super(clientMap.get("username"), clientMap.get("password"),
                 clientMap.get("email"), clientMap.get("firstname"), clientMap.get("lastname"));

@@ -22,6 +22,12 @@ public class Doctor extends User {
         this.country = country;
     }
 
+    public String toString() {
+        return getUsername() + " " + getPassword() + " " + getEmail() + " " + getFirstName() + " " +
+                    getLastName() + " " + String.valueOf(getAge()) + " " + String.valueOf(getAbsolvationYear()) +
+                " " + getPhoneNumber() + " " + getCity() + " " + getCountry();
+    }
+
     public Doctor(HashMap<String, String> doctorMap) {
         super(doctorMap.get("username"), doctorMap.get("password"),
                 doctorMap.get("email"), doctorMap.get("firstname"), doctorMap.get("lastname"));
@@ -99,4 +105,5 @@ public class Doctor extends User {
         }
         return "Unknown field";
     }
+
 }
