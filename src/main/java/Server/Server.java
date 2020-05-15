@@ -3,6 +3,10 @@ package Server;
 import UsersTypes.Client;
 import UsersTypes.Doctor;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.*;
 
 public class Server {
@@ -39,9 +43,16 @@ public class Server {
         int resultSet = preparedStatement.executeUpdate();
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 
         connection = DriverManager.getConnection(URL, "root", "");
+        ServerSocket serverSocket = new ServerSocket(3333);
+        while (true) {
+            Socket s = serverSocket.accept();
+            DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
+            System.out.println(dataInputStream.readUTF());
+
+        }
     }
 
 }
