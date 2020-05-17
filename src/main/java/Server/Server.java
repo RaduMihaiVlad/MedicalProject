@@ -2,6 +2,7 @@ package Server;
 
 import UsersTypes.Client;
 import UsersTypes.Doctor;
+import Utils.Constants;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -13,6 +14,8 @@ public class Server {
 
     public static final String URL = "jdbc:mysql://localhost:3306/pao";
     public static Connection connection;
+    public static String doctorComand = "";
+    public static String clientComand = "";
 
     private static int addClient(Client client) throws SQLException {
         Statement stm = connection.createStatement();
@@ -59,8 +62,14 @@ public class Server {
                         Socket s = serverSocket.accept();
                         DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
                         Doctor doctor = convertSocketMessageToDoctor(dataInputStream.readUTF());
-                        if (addDoctor(doctor) == 1) {
-                            System.out.println("Doctor successfully added to DB");
+                        if (doctorComand.equals(Constants.ADD)) {
+                            if (addDoctor(doctor) == 1) {
+                                System.out.println("Doctor successfully added to DB");
+                            }
+                        } else if (doctorComand.equals(Constants.REMOVE)) {
+                            if (removeDoctor(doctor) == 1) {
+                                System.out.println("Doctor successfully removed from DB");
+                            }
                         }
 
                         s.close();
@@ -80,8 +89,14 @@ public class Server {
                         Socket s = serverSocket.accept();
                         DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
                         Client client = convertSocketMessageToClient(dataInputStream.readUTF());
-                        if (addClient(client) == 1) {
-                            System.out.println("Client successfully added to DB");
+                        if (clientComand.equals(Constants.ADD)) {
+                            if (addClient(client) == 1) {
+                                System.out.println("Client successfully added to DB");
+                            }
+                        } else if (clientComand.equals(Constants.REMOVE)) {
+                            if (removeClient(client) == 1) {
+                                System.out.println("Client successfully removed from DB");
+                            }
                         }
 
                         s.close();
@@ -96,6 +111,22 @@ public class Server {
         clientsThread.start();
     }
 
+    private static int removeClient(Client client) throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("delete from clients where email=?");
+        preparedStatement.setString(1, client.getEmail());
+        int resultSet = preparedStatement.executeUpdate();
+        return 1;
+    }
+
+    private static int removeDoctor(Doctor doctor) throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("delete from doctors where email=?");
+        preparedStatement.setString(1, doctor.getEmail());
+        int resultSet = preparedStatement.executeUpdate();
+        return 1;
+    }
+
     private static Doctor convertSocketMessageToDoctor(String doctorString) {
         String[] componentData = doctorString.split(" ");
         String username = componentData[0];
@@ -108,6 +139,7 @@ public class Server {
         String phoneNumber = componentData[7];
         String city = componentData[8];
         String country = componentData[9];
+        doctorComand = componentData[10];
         return new Doctor(username, password, email, firstName, lastName, age, absolvationYear, phoneNumber, city, country);
     }
 
@@ -120,6 +152,7 @@ public class Server {
         String lastName = componentData[4];
         String phoneNumber = componentData[5];
         int age = Integer.parseInt(componentData[6]);
+        clientComand = componentData[7];
         return new Client(username, password, email, firstName, lastName, phoneNumber, age);
     }
 

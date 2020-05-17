@@ -3,6 +3,7 @@ import Centers.DataDoctorCenter;
 import UsersTypes.Client;
 import UsersTypes.Doctor;
 import UsersTypes.User;
+import Utils.Constants;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import sun.plugin2.message.Message;
@@ -86,13 +87,13 @@ public class ClientsAndDoctorsStorageManipulator {
 //        fileManipulator.writeClientsToCSV(clientList);
 //        fileManipulator.writeDoctorsToCSV(doctorList);
 
-        Socket socket = new Socket("localhost", 3334);
+        Socket socket = new Socket("localhost", 3333);
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
         Doctor doctor = doctorList.get(1);
         Client client = clientList.get(0);
 
-        dataOutputStream.writeUTF(client.toString());
+        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.REMOVE);
         dataOutputStream.flush();
 
     }
