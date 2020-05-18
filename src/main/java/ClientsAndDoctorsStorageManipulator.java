@@ -49,6 +49,22 @@ public class ClientsAndDoctorsStorageManipulator {
         return dataDoctorCenter.registerDoctorFromJSONObjectUser(jsonUser, inputStream);
     }
 
+    public static void modifyClientToDatabase(Client client, String modifyType) throws IOException {
+
+        Socket socket = new Socket("localhost", 3334);
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        dataOutputStream.writeUTF(client.toString() + " " + modifyType);
+        dataOutputStream.flush();
+    }
+
+    public static void modifyDoctorToDatabase(Doctor doctor, String modifyType) throws IOException {
+
+        Socket socket = new Socket("localhost", 3333);
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        dataOutputStream.writeUTF(doctor.toString() + " " + modifyType);
+        dataOutputStream.flush();
+    }
+
     public static void main(String[] args) throws IOException, ParseException {
         ClientsAndDoctorsStorageManipulator clientsAndDoctorsStorageManipulator =
                 new ClientsAndDoctorsStorageManipulator("src/main/config/clients.json",
