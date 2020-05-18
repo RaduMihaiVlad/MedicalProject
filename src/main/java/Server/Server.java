@@ -17,9 +17,9 @@ public class Server {
     public static String doctorComand = "";
     public static String clientComand = "";
 
-    private static int addClient(Client client) throws SQLException {
+    private static int addClient(Client client, String clientsThread) throws SQLException {
         Statement stm = connection.createStatement();
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into clients(username, password, email, first_name, last_name, phone_number, age) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into clients(username, password, email, first_name, last_name, phone_number, age, thread_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setString(1, client.getUsername());
         preparedStatement.setString(2, client.getPassword());
         preparedStatement.setString(3, client.getEmail());
@@ -27,13 +27,14 @@ public class Server {
         preparedStatement.setString(5, client.getLastName());
         preparedStatement.setString(6, client.getPhoneNumber());
         preparedStatement.setInt(7, client.getAge());
+        preparedStatement.setString(8, clientsThread);
         int resultSet = preparedStatement.executeUpdate();
         return 1;
     }
 
-    private static int addDoctor(Doctor doctor) throws SQLException {
+    private static int addDoctor(Doctor doctor, String thread_name) throws SQLException {
         Statement stm = connection.createStatement();
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into doctors(username, password, email, first_name, last_name, age, absolvation_year, phone_number, city, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into doctors(username, password, email, first_name, last_name, age, absolvation_year, phone_number, city, country, thread_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setString(1, doctor.getUsername());
         preparedStatement.setString(2, doctor.getPassword());
         preparedStatement.setString(3, doctor.getEmail());
@@ -44,71 +45,9 @@ public class Server {
         preparedStatement.setString(8, doctor.getPhoneNumber());
         preparedStatement.setString(9, doctor.getCity());
         preparedStatement.setString(10, doctor.getCountry());
+        preparedStatement.setString(11, thread_name);
         int resultSet = preparedStatement.executeUpdate();
         return 1;
-    }
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-
-        System.out.println("Server is starting");
-        connection = DriverManager.getConnection(URL, "root", "");
-        System.out.println("Server connected to DB");
-        Thread doctorsThread = new Thread() {
-            public void run() {
-                try {
-                    ServerSocket serverSocket = new ServerSocket(3333);
-                    System.out.println("Doctors socket is running on port 3333");
-                    while (true) {
-                        Socket s = serverSocket.accept();
-                        DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
-                        Doctor doctor = convertSocketMessageToDoctor(dataInputStream.readUTF());
-                        if (doctorComand.equals(Constants.ADD)) {
-                            if (addDoctor(doctor) == 1) {
-                                System.out.println("Doctor successfully added to DB");
-                            }
-                        } else if (doctorComand.equals(Constants.REMOVE)) {
-                            if (removeDoctor(doctor) == 1) {
-                                System.out.println("Doctor successfully removed from DB");
-                            }
-                        }
-
-                        s.close();
-                    }
-                } catch (IOException | SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Thread clientsThread = new Thread() {
-            public void run() {
-                try {
-                    ServerSocket serverSocket = new ServerSocket(3334);
-                    System.out.println("Clients server is running on port 3334");
-                    while (true) {
-                        Socket s = serverSocket.accept();
-                        DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
-                        Client client = convertSocketMessageToClient(dataInputStream.readUTF());
-                        if (clientComand.equals(Constants.ADD)) {
-                            if (addClient(client) == 1) {
-                                System.out.println("Client successfully added to DB");
-                            }
-                        } else if (clientComand.equals(Constants.REMOVE)) {
-                            if (removeClient(client) == 1) {
-                                System.out.println("Client successfully removed from DB");
-                            }
-                        }
-
-                        s.close();
-                    }
-                } catch (IOException | SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        doctorsThread.start();
-        clientsThread.start();
     }
 
     private static int removeClient(Client client) throws SQLException {
@@ -156,4 +95,71 @@ public class Server {
         return new Client(username, password, email, firstName, lastName, phoneNumber, age);
     }
 
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+
+        System.out.println("Server is starting");
+        connection = DriverManager.getConnection(URL, "root", "");
+        System.out.println("Server connected to DB");
+        Thread doctorsThread = new Thread();
+        Thread finalDoctorsThread = doctorsThread;
+        doctorsThread = new Thread() {
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(3333);
+                    System.out.println("Doctors socket is running on port 3333");
+                    while (true) {
+                        Socket s = serverSocket.accept();
+                        DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
+                        Doctor doctor = convertSocketMessageToDoctor(dataInputStream.readUTF());
+                        if (doctorComand.equals(Constants.ADD)) {
+                            if (addDoctor(doctor, finalDoctorsThread.getName()) == 1) {
+                                System.out.println("Doctor successfully added to DB");
+                            }
+                        } else if (doctorComand.equals(Constants.REMOVE)) {
+                            if (removeDoctor(doctor) == 1) {
+                                System.out.println("Doctor successfully removed from DB");
+                            }
+                        }
+
+                        s.close();
+                    }
+                } catch (IOException | SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread clientsThread = new Thread();
+
+        Thread finalClientsThread = clientsThread;
+        clientsThread = new Thread() {
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(3334);
+                    System.out.println("Clients server is running on port 3334");
+                    while (true) {
+                        Socket s = serverSocket.accept();
+                        DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
+                        Client client = convertSocketMessageToClient(dataInputStream.readUTF());
+                        if (clientComand.equals(Constants.ADD)) {
+                            if (addClient(client, finalClientsThread.getName()) == 1) {
+                                System.out.println("Client successfully added to DB");
+                            }
+                        } else if (clientComand.equals(Constants.REMOVE)) {
+                            if (removeClient(client) == 1) {
+                                System.out.println("Client successfully removed from DB");
+                            }
+                        }
+
+                        s.close();
+                    }
+                } catch (IOException | SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        doctorsThread.start();
+        clientsThread.start();
+    }
 }

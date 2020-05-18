@@ -103,13 +103,13 @@ public class ClientsAndDoctorsStorageManipulator {
 //        fileManipulator.writeClientsToCSV(clientList);
 //        fileManipulator.writeDoctorsToCSV(doctorList);
 
-        Socket socket = new Socket("localhost", 3333);
+        Socket socket = new Socket("localhost", 3334);
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
         Doctor doctor = doctorList.get(1);
         Client client = clientList.get(0);
 
-        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.REMOVE);
+        dataOutputStream.writeUTF(client.toString() + " " + Constants.ADD);
         dataOutputStream.flush();
 
     }
