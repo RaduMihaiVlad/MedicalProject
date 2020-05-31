@@ -63,27 +63,27 @@ public class FileManipulator {
         doctorFileWriter.write(doctorList);
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        actionMoves.write("doctor_writing", dateFormat.format(date));
+        actionMoves.write("doctor_writing", dateFormat.format(date), Thread.currentThread().toString());
     }
 
     public void writeClientsToCSV(List<Client> clientList) throws IOException, ParseException {
         clientFileWriter.write(clientList);
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        actionMoves.write("client_writing", dateFormat.format(date));
+        actionMoves.write("client_writing", dateFormat.format(date), Thread.currentThread().toString());
     }
 
     public List<Client> readClients() throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        actionMoves.write("client_reading", dateFormat.format(date));
+        actionMoves.write("client_reading", dateFormat.format(date), Thread.currentThread().toString());
         return clientFileReader.read();
     }
 
     public List<Doctor> readDoctors() throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        actionMoves.write("client_writing", dateFormat.format(date));
+        actionMoves.write("client_writing", dateFormat.format(date), Thread.currentThread().toString());
         return doctorFileReader.read();
     }
 

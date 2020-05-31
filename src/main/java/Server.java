@@ -1,14 +1,17 @@
-package Server;
-
 import UsersTypes.Client;
 import UsersTypes.Doctor;
 import Utils.Constants;
 
+import javax.print.Doc;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Server {
 
@@ -50,6 +53,39 @@ public class Server {
         return 1;
     }
 
+    private static int updateDoctor(Doctor doctor) throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("update doctors set username=?, password=?, email=?, first_name=?, last_name=?, age=?, absolvation_year=?, phone_number=?, city=?, country=? where email=?");
+        preparedStatement.setString(1, doctor.getUsername());
+        preparedStatement.setString(2, doctor.getPassword());
+        preparedStatement.setString(3, doctor.getEmail());
+        preparedStatement.setString(4, doctor.getFirstName());
+        preparedStatement.setString(5, doctor.getLastName());
+        preparedStatement.setInt(6, doctor.getAge());
+        preparedStatement.setInt(7, doctor.getAbsolvationYear());
+        preparedStatement.setString(8, doctor.getPhoneNumber());
+        preparedStatement.setString(9, doctor.getCity());
+        preparedStatement.setString(10, doctor.getCountry());
+        preparedStatement.setString(11, doctor.getEmail());
+        int resultSet = preparedStatement.executeUpdate();
+        return 1;
+    }
+
+    private static int updateClient(Client client) throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("update clients set username=?, password=?, email=?, first_name=?, last_name=?, phone_number=?, age=? where email=?");
+        preparedStatement.setString(1, client.getUsername());
+        preparedStatement.setString(2, client.getPassword());
+        preparedStatement.setString(3, client.getEmail());
+        preparedStatement.setString(4, client.getFirstName());
+        preparedStatement.setString(5, client.getLastName());
+        preparedStatement.setString(6, client.getPhoneNumber());
+        preparedStatement.setInt(7, client.getAge());
+        preparedStatement.setString(8, client.getEmail());
+        int resultSet = preparedStatement.executeUpdate();
+        return 1;
+    }
+
     private static int removeClient(Client client) throws SQLException {
         Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("delete from clients where email=?");
@@ -64,6 +100,47 @@ public class Server {
         preparedStatement.setString(1, doctor.getEmail());
         int resultSet = preparedStatement.executeUpdate();
         return 1;
+    }
+
+    private static ArrayList<Client> getClients() throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from clients");
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ArrayList<Client> clientArrayList = new ArrayList<>();
+
+        while(resultSet.next()) {
+            clientArrayList.add(new Client(resultSet.getString("username"),
+                                           resultSet.getString("password"),
+                                           resultSet.getString("email"),
+                                           resultSet.getString("first_name"),
+                                           resultSet.getString("last_name"),
+                                           resultSet.getString("phone_number"),
+                                           resultSet.getInt("age")));
+        }
+        return clientArrayList;
+    }
+
+    private static ArrayList<Doctor> getDoctors() throws SQLException {
+        Statement stm = connection.createStatement();
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from doctors");
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ArrayList<Doctor> doctorArrayList = new ArrayList<>();
+
+        while(resultSet.next()) {
+            doctorArrayList.add(new Doctor(resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getString("email"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("last_name"),
+                    resultSet.getInt("age"),
+                    resultSet.getInt("absolvation_year"),
+                    resultSet.getString("phone_number"),
+                    resultSet.getString("city"),
+                    resultSet.getString("country")));
+        }
+        return doctorArrayList;
     }
 
     private static Doctor convertSocketMessageToDoctor(String doctorString) {
@@ -95,6 +172,7 @@ public class Server {
         return new Client(username, password, email, firstName, lastName, phoneNumber, age);
     }
 
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 
         System.out.println("Server is starting");
@@ -110,14 +188,35 @@ public class Server {
                     while (true) {
                         Socket s = serverSocket.accept();
                         DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
-                        Doctor doctor = convertSocketMessageToDoctor(dataInputStream.readUTF());
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        java.util.Date date = new Date();
+                        ActionMoves actionMoves = ActionMoves.getInstance("src/main/StoringFiles/actions.csv");
+
+                        String msg = dataInputStream.readUTF();
+                        if (msg.equals(Constants.GET)) {
+                            ArrayList<Doctor> doctorList = getDoctors();
+                            for (Doctor doctor: doctorList) {
+                                System.out.println("Doctor is: " + doctor.toString());
+                            }
+                            actionMoves.write("get_doctor_db", dateFormat.format(date), finalDoctorsThread.getName());
+                            continue;
+                        }
+                        Doctor doctor = convertSocketMessageToDoctor(msg);
                         if (doctorComand.equals(Constants.ADD)) {
                             if (addDoctor(doctor, finalDoctorsThread.getName()) == 1) {
                                 System.out.println("Doctor successfully added to DB");
+                                actionMoves.write("add_doctor_db", dateFormat.format(date), finalDoctorsThread.getName());
                             }
                         } else if (doctorComand.equals(Constants.REMOVE)) {
                             if (removeDoctor(doctor) == 1) {
                                 System.out.println("Doctor successfully removed from DB");
+                                actionMoves.write("remove_doctor_db", dateFormat.format(date), finalDoctorsThread.getName());
+                            }
+                        } else if (doctorComand.equals(Constants.UPDATE)) {
+                            if (updateDoctor(doctor) == 1) {
+                                System.out.println("Doctor successfully updated");
+                                actionMoves.write("update_doctor_db", dateFormat.format(date), finalDoctorsThread.getName());
+
                             }
                         }
 
@@ -140,14 +239,34 @@ public class Server {
                     while (true) {
                         Socket s = serverSocket.accept();
                         DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
-                        Client client = convertSocketMessageToClient(dataInputStream.readUTF());
+                        String msg = dataInputStream.readUTF();
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        java.util.Date date = new Date();
+                        ActionMoves actionMoves = ActionMoves.getInstance("src/main/StoringFiles/actions.csv");
+                        if (msg.equals(Constants.GET)) {
+                            ArrayList<Client> clientList = getClients();
+                            for (Client client: clientList) {
+                                System.out.println("Client is: " + client.toString());
+                                actionMoves.write("get_clients_db", dateFormat.format(date), finalClientsThread.getName());
+                            }
+                            continue;
+                        }
+                        Client client = convertSocketMessageToClient(msg);
                         if (clientComand.equals(Constants.ADD)) {
                             if (addClient(client, finalClientsThread.getName()) == 1) {
                                 System.out.println("Client successfully added to DB");
+                                actionMoves.write("add_clients_db", dateFormat.format(date), finalClientsThread.getName());
                             }
                         } else if (clientComand.equals(Constants.REMOVE)) {
                             if (removeClient(client) == 1) {
                                 System.out.println("Client successfully removed from DB");
+                                actionMoves.write("remove_clients_db", dateFormat.format(date), finalClientsThread.getName());
+                            }
+                        } else if (clientComand.equals(Constants.UPDATE)) {
+                            if (updateClient(client) == 1) {
+                                System.out.println("Client successfully updated");
+                                actionMoves.write("update_clients_db", dateFormat.format(date), finalClientsThread.getName());
                             }
                         }
 
@@ -162,4 +281,5 @@ public class Server {
         doctorsThread.start();
         clientsThread.start();
     }
+
 }

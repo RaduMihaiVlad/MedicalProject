@@ -108,9 +108,36 @@ public class ClientsAndDoctorsStorageManipulator {
 
         Doctor doctor = doctorList.get(1);
         Client client = clientList.get(0);
+        doctor.setUsername("updated_username");
+        client.setUsername("updated_client_username");
 
-        dataOutputStream.writeUTF(client.toString() + " " + Constants.ADD);
+//        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.UPDATE);
+//        dataOutputStream.flush();
+
+//        dataOutputStream.writeUTF(client.toString() + " " + Constants.UPDATE);
+//        dataOutputStream.flush();
+//
+//        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.ADD);
+//        dataOutputStream.flush();
+//
+//        dataOutputStream.writeUTF(client.toString() + " " + Constants.ADD);
+//        dataOutputStream.flush();
+//
+//        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.REMOVE);
+//        dataOutputStream.flush();
+//
+        dataOutputStream.writeUTF(client.toString() + " " + Constants.REMOVE);
         dataOutputStream.flush();
+
+
+//        dataOutputStream.writeUTF(Constants.GET);
+//        dataOutputStream.flush();
+
+//        dataOutputStream.writeUTF(doctor.toString() + " " + Constants.ADD);
+//        dataOutputStream.flush();
+
+//        dataOutputStream.writeUTF(Constants.GET);
+//        dataOutputStream.flush();
 
     }
 
