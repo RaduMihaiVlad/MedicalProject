@@ -21,7 +21,6 @@ public class Server {
     public static String clientComand = "";
 
     private static int addClient(Client client, String clientsThread) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("insert into clients(username, password, email, first_name, last_name, phone_number, age, thread_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setString(1, client.getUsername());
         preparedStatement.setString(2, client.getPassword());
@@ -36,7 +35,6 @@ public class Server {
     }
 
     private static int addDoctor(Doctor doctor, String thread_name) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("insert into doctors(username, password, email, first_name, last_name, age, absolvation_year, phone_number, city, country, thread_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         preparedStatement.setString(1, doctor.getUsername());
         preparedStatement.setString(2, doctor.getPassword());
@@ -54,7 +52,6 @@ public class Server {
     }
 
     private static int updateDoctor(Doctor doctor) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("update doctors set username=?, password=?, email=?, first_name=?, last_name=?, age=?, absolvation_year=?, phone_number=?, city=?, country=? where email=?");
         preparedStatement.setString(1, doctor.getUsername());
         preparedStatement.setString(2, doctor.getPassword());
@@ -72,7 +69,6 @@ public class Server {
     }
 
     private static int updateClient(Client client) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("update clients set username=?, password=?, email=?, first_name=?, last_name=?, phone_number=?, age=? where email=?");
         preparedStatement.setString(1, client.getUsername());
         preparedStatement.setString(2, client.getPassword());
@@ -87,7 +83,6 @@ public class Server {
     }
 
     private static int removeClient(Client client) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("delete from clients where email=?");
         preparedStatement.setString(1, client.getEmail());
         int resultSet = preparedStatement.executeUpdate();
@@ -95,7 +90,6 @@ public class Server {
     }
 
     private static int removeDoctor(Doctor doctor) throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("delete from doctors where email=?");
         preparedStatement.setString(1, doctor.getEmail());
         int resultSet = preparedStatement.executeUpdate();
@@ -103,7 +97,6 @@ public class Server {
     }
 
     private static ArrayList<Client> getClients() throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("select * from clients");
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -122,7 +115,6 @@ public class Server {
     }
 
     private static ArrayList<Doctor> getDoctors() throws SQLException {
-        Statement stm = connection.createStatement();
         PreparedStatement preparedStatement = connection.prepareStatement("select * from doctors");
         ResultSet resultSet = preparedStatement.executeQuery();
 

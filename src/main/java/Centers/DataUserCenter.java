@@ -214,7 +214,7 @@ public class DataUserCenter {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        DataUserCenter dataCenter  = new DataUserCenter("C:\\Users\\eu\\Desktop\\facultate\\PAO\\ProiectPao\\src\\main\\config\\users.json");
+        DataUserCenter dataCenter  = new DataUserCenter("src/main/config/users.json");
 //        User user = new User("abc1@yahoo.com", "abc", "parola", "Ion", "Vasile");
 //        System.out.println(dataCenter.isValidLogin(user));
 //        System.out.println(dataCenter.registerUser(System.in));
